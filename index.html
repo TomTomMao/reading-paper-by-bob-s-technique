@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="PaperLens turns research papers into Laramee-style structured summaries, slides and videos." />
+  <title>PaperLens — Research paper → summary, slides & video</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs/dist/pptxgen.bundle.js"></script>
+</head>
+<body>
+  <div class="shell">
+    <nav class="topbar"><a class="brand" href="#"><span class="logo">P</span><span>PaperLens</span></a><div class="nav-right"><span class="method">Laramee method</span><a href="https://doi.org/10.1109/MCG.2011.44" target="_blank" rel="noreferrer">Method paper ↗</a></div></nav>
+
+    <main>
+      <section class="hero">
+        <div class="eyebrow">Research paper → essentials → slides → video</div>
+        <h1>Read the paper.<br><span>Keep what matters.</span></h1>
+        <p>PaperLens is a small browser agent inspired by Robert S. Laramee’s framework for extracting the essentials from a research paper. Upload a PDF, let DeepSeek structure it, then export an editable deck or an animated video.</p>
+      </section>
+
+      <section class="workspace">
+        <div class="input-panel panel">
+          <div class="panel-head"><div><span class="step">01</span><h2>Give PaperLens a paper</h2></div><button id="resetBtn" class="ghost">Reset</button></div>
+          <label class="dropzone" for="paperFile"><input id="paperFile" type="file" accept="application/pdf,.pdf"/><span class="drop-icon">↥</span><b>Choose a PDF paper</b><small>PDF text is extracted locally in your browser.</small></label>
+          <label class="field"><span>DeepSeek API key</span><input id="apiKey" type="password" autocomplete="off" placeholder="sk-…"/><small>Held in memory only. Never saved by PaperLens.</small></label>
+          <button id="advancedToggle" class="advanced-toggle">Advanced settings <span>⌄</span></button>
+          <div id="advancedPanel" class="advanced-panel"><label class="field"><span>OpenAI-compatible endpoint</span><input id="endpoint" value="https://api.deepseek.com"/></label><label class="field"><span>Model</span><input id="model" value="deepseek-flash"/></label></div>
+          <div class="action-row"><button id="runBtn" class="primary">Summarise paper <span>→</span></button><button id="demoBtn" class="secondary">Try demo</button></div>
+          <p class="privacy-note">Static-site trade-off: your PDF text is sent directly from your browser to the API endpoint you choose. Do not use confidential papers with an endpoint you do not trust.</p>
+        </div>
+
+        <aside class="agent-panel panel">
+          <div class="panel-head"><div><span class="step">02</span><h2>Agent activity</h2></div><span id="statusPill" class="status-pill" data-tone="idle">Idle</span></div>
+          <div class="progress-wrap"><div class="progress-track"><div id="progressBar"></div></div><span id="progressText">Waiting for a paper</span></div>
+          <p id="pdfMeta" class="pdf-meta">PDF stays in your browser until text is sent to the selected API endpoint.</p>
+          <div class="agent-map">
+            <div><span>1</span><b>Concept</b></div><div><span>2</span><b>Implementation</b></div><div><span>3</span><b>Related work</b></div><div><span>4</span><b>Data</b></div><div><span>5</span><b>Techniques</b></div><div><span>6</span><b>Domain</b></div>
+          </div>
+          <div id="activityLog" class="activity-log" aria-live="polite"></div>
+        </aside>
+      </section>
+
+      <section id="resultArea" class="results" hidden>
+        <div class="section-head"><div><span class="step">03</span><h2>Laramee extraction</h2></div><p>Comparable research notes, not a generic paragraph summary.</p></div>
+        <div id="summaryGrid" class="summary-grid"></div>
+
+        <div class="section-head deck-head"><div><span class="step">04</span><h2>Generated presentation</h2></div><div class="export-actions"><button id="playDeck" class="secondary" disabled>▶ Preview + narration</button><button id="stopDeck" class="ghost" disabled>Stop</button><button id="exportPpt" class="secondary" disabled>Export .pptx</button><button id="exportVideo" class="primary small" disabled>Export .webm</button></div></div>
+        <div id="slides" class="slides"></div>
+        <p class="video-note">Video export is an animated WebM generated entirely in the browser. Preview mode uses your browser’s built-in speech synthesis for narration; the MVP WebM export is silent.</p>
+      </section>
+
+      <section class="method-section">
+        <div><span class="eyebrow">Why this structure?</span><h2>Bob’s filter, turned into an agent.</h2></div>
+        <p>Laramee’s method says the useful output of reading a paper is a small set of essentials: the concept, its implementation, the previous work it builds upon, the data characteristics, the visualization techniques, and the application domain. PaperLens makes those six slots the model’s contract.</p>
+      </section>
+    </main>
+    <footer><span>PaperLens MVP · static GitHub Pages app</span><span>Built for literature review, not blind trust.</span></footer>
+  </div>
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>

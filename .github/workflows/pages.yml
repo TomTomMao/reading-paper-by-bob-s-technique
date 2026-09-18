@@ -18,10 +18,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm install
+      - name: Run unit and boot tests
+        run: npm test
+      - name: Check game JavaScript syntax
+        run: |
+          node --check pixel-net-cafe/data.js
+          node --check pixel-net-cafe/core.js
+          node --check pixel-net-cafe/ui.js
+          node --check pixel-net-cafe/sim.js
+          node --check pixel-net-cafe/scene.js
+      - name: Build static Pages artifact
+        run: |
+          mkdir -p _site
+          rsync -a --exclude node_modules --exclude .git --exclude _site ./ _site/
+          mkdir -p _site/pixel-net-cafe/vendor
+          cp node_modules/phaser/dist/phaser.min.js _site/pixel-net-cafe/vendor/phaser.min.js
+          test -s _site/pixel-net-cafe/vendor/phaser.min.js
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

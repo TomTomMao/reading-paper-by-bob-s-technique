@@ -3,111 +3,42 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#17131f">
+<meta name="theme-color" content="#120d1a">
 <title>像素网吧：夜班经理</title>
-<style>
-:root{--bg:#100d17;--p:#1c1726;--p2:#282136;--ink:#f6f0dc;--mut:#a49bad;--y:#ffd05a;--g:#72d5a8;--r:#ff7180;--line:#554b66}
-*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-monospace,monospace;image-rendering:pixelated}body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-main{width:min(100%,540px);margin:auto;padding:12px}.top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.ey{font-size:10px;color:var(--y);letter-spacing:.14em}h1{font-size:20px;margin:3px 0 10px}button{font:inherit}
-.btn{border:2px solid #6e6282;background:#30283e;color:var(--ink);padding:9px 8px;box-shadow:3px 3px #08060b;min-height:40px}.btn:active{transform:translate(2px,2px);box-shadow:1px 1px #08060b}.btn:disabled{opacity:.4}.primary{border-color:#a57c31;background:#58401d;color:#fff1bd}.mini{min-height:30px;padding:4px 8px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:8px}.stat{background:var(--p);border:2px solid var(--line);padding:6px;box-shadow:3px 3px #08060b;min-width:0}.stat small{display:block;color:var(--mut);font-size:9px;white-space:nowrap;overflow:hidden}.stat b{font-size:13px}
-#game{width:100%;aspect-ratio:9/10;max-height:58vh;border:3px solid #62576f;background:#0b090e;box-shadow:5px 5px #08060b;overflow:hidden}#game canvas{width:100%!important;height:100%!important;display:block;image-rendering:pixelated}
-.panel{background:var(--p);border:2px solid var(--line);box-shadow:4px 4px #08060b;margin-top:9px;padding:10px}.row{display:flex;justify-content:space-between;align-items:center;gap:8px}.muted{font-size:11px;color:var(--mut);line-height:1.45}.actions{display:grid;grid-template-columns:1.2fr 1fr;gap:7px}
-#shop{display:grid;grid-template-columns:1fr;gap:7px;margin-top:8px}.pc{background:var(--p2);border:2px solid var(--line);padding:8px}.pc h3{font-size:12px;margin:0 0 3px}.pc p{font-size:10px;color:var(--mut);margin:0 0 6px}.pc .row{font-size:10px}.good{color:var(--g)}.bad{color:var(--r)}
-#log{max-height:90px;overflow:auto;display:grid;gap:4px;margin-top:7px}.log{font-size:10px;background:#121019;padding:5px 7px;border-left:3px solid #51485f}.log.good{border-left-color:var(--g)}.log.bad{border-left-color:var(--r)}
-#overlay{position:fixed;inset:0;background:#050409c9;display:none;place-items:end center;padding:12px;z-index:20}.card{width:min(100%,540px);background:var(--p);border:3px solid #6c617b;padding:12px;box-shadow:6px 6px #050407}.perks{display:grid;gap:8px}.perk{background:var(--p2);border:2px solid var(--line);padding:9px}.perk h3{font-size:12px;margin:0 0 4px}.perk p{font-size:10px;color:var(--mut);margin:0 0 8px}
-footer{font-size:9px;color:#7e7589;display:flex;justify-content:space-between;padding:10px 2px 18px}.chip{font-size:10px;border:2px solid var(--line);background:var(--p2);padding:3px 6px;color:var(--y)}
-</style>
+<link rel="stylesheet" href="styles.css">
+
 </head>
 <body>
 <main>
-  <div class="top"><div><div class="ey" id="sub">ROGUELITE · 网吧经营</div><h1 id="title">像素网吧：夜班经理</h1></div><button class="btn mini" id="lang">EN</button></div>
+  <div class="top"><div><div class="eyebrow" id="sub">ROGUELITE · 网吧经营</div><h1 class="title" id="title">像素网吧：夜班经理</h1></div><button class="btn mini" id="lang">EN</button></div>
   <section class="stats">
-    <div class="stat"><small id="cashL">现金</small><b id="cash">¥480</b></div>
-    <div class="stat"><small id="dayL">第几天</small><b id="day">1</b></div>
-    <div class="stat"><small id="repL">口碑</small><b id="rep">2</b></div>
-    <div class="stat"><small id="powL">电费</small><b id="pow">¥0</b></div>
+    <div class="stat"><small id="cashL">现金</small><b id="cash">¥700</b></div>
+    <div class="stat"><small id="dayL">天数</small><b id="day">1 / 15</b></div>
+    <div class="stat"><small id="repL">口碑</small><b id="rep">5</b></div>
+    <div class="stat"><small id="costL">日成本</small><b id="cost">¥45</b></div>
+  </section>
+  <section class="runbar">
+    <div class="row"><span><b id="district">大学城</b> · <span id="bossLabel" class="muted">下一场 Boss 夜：第 5 天</span></span><span class="chip" id="flow">0 / 9</span></div>
+    <div class="bar"><i id="flowBar"></i></div>
+    <div class="row" style="margin-top:7px"><span id="contractText">今日任务：营业额 ¥120</span><span id="contractProgress" class="good">¥0 / ¥120</span></div>
   </section>
   <div id="game"></div>
   <section class="panel">
-    <div class="row"><div><div class="ey" id="selL">当前选择</div><b id="selT">空地</b></div><div class="chip" id="prog">0 / 8</div></div>
-    <p class="muted" id="desc">购买座位，然后配置电脑。</p>
-    <div class="actions"><button class="btn primary" id="mainBtn">购买座位 ¥120</button><button class="btn" id="shopBtn">电脑商店</button></div>
+    <div class="row"><div><div class="eyebrow" id="selL">当前选择</div><b class="sectionTitle" id="selT">空地</b></div><div class="chip" id="seatStatus">EMPTY</div></div>
+    <p class="desc" id="desc">购买座位，然后配置电脑。不同顾客会挑不同档位的机器。</p>
+    <div class="actions"><button class="btn primary" id="mainBtn">购买座位 ¥110</button><button class="btn" id="shopBtn">电脑商店</button></div>
+    <div class="subactions"><button class="btn" id="facilityBtn">设施升级</button><button class="btn" id="promoBtn">今晚促销 ¥30</button></div>
     <div id="shop" style="display:none"></div>
   </section>
-  <section class="panel"><div class="row"><b id="logT">营业记录</b><button class="btn mini" id="reset">重开</button></div><div id="log"></div></section>
-  <footer><span id="save">自动保存</span><span>Phaser 4 · localStorage</span></footer>
+  <section class="panel"><div class="row"><b class="sectionTitle" id="logT">营业记录</b><div><button class="btn mini" id="help">玩法</button> <button class="btn mini danger" id="reset">重开</button></div></div><div id="log"></div></section>
+  <footer><span id="save">自动保存 · 刷新可继续</span><span id="record">最佳 Day 1</span></footer>
 </main>
-<div id="overlay"><div class="card"><div class="ey" id="perkK">每日强化</div><h2 id="perkT" style="font-size:16px">三选一：永久 Buff</h2><div class="perks" id="perks"></div></div></div>
+<div id="overlay"><div class="modal"><div class="eyebrow" id="modalK">事件</div><h2 id="modalT"></h2><div class="body" id="modalB"></div><div class="choices" id="choices"></div></div></div>
 <script src="https://cdn.jsdelivr.net/npm/phaser@4.2.1/dist/phaser.min.js"></script>
-<script>
-(function(){
-var K="pixel-net-cafe-save-v2";
-var pcs=[
-{id:"office",cost:90,power:1,rate:13,color:0x7b86a2},
-{id:"gaming",cost:220,power:2,rate:24,color:0x43b5a0},
-{id:"pro",cost:460,power:4,rate:42,color:0xd985ff}
-];
-var perkIds=["coupon","solar","vip","repair","hype","snacks"];
-var Z={
-zh:{title:"像素网吧：夜班经理",sub:"ROGUELITE · 网吧经营",cash:"现金",day:"第几天",rep:"口碑",pow:"电费",sel:"当前选择",empty:"空地",emptyD:"购买座位，然后配置电脑。",seat:"座位 {n}",noPc:"还没有电脑，先装一台。",pcD:"{pc} · 每客约 ¥{rate} · 耗电 {power}",buySeat:"购买座位 ¥{cost}",shop:"电脑商店",change:"升级 / 换电脑",log:"营业记录",reset:"重开",save:"自动保存",office:"办公机",gaming:"游戏机",pro:"电竞旗舰",officeD:"便宜省电，适合开荒。",gamingD:"主力机器，性价比高。",proD:"高收入，也更费电。",buy:"购买 ¥{cost}",eq:"已装备",poor:"现金不够。",bSeat:"买下一个新座位。",bPc:"安装了 {pc}。",cust:"{seat} 上机，收入 ¥{money}。",full:"客满，顾客去了隔壁网吧。",end:"第 {day} 天结束，支付电费 ¥{power}。",streamer:"主播来直播：额外收入和口碑！",surge:"电压不稳：维修费增加。",broken:"设备故障：紧急维修。",tour:"社区约战：今天客流增加。",perkK:"每日强化",perkT:"三选一：永久 Buff",pick:"选择",coupon:"熟客渠道",couponD:"以后采购价降低 12%。",solar:"节能改造",solarD:"电费降低 18%。",vip:"VIP 定价",vipD:"每位顾客收入 +15%。",repair:"备用零件",repairD:"降低设备故障损失。",hype:"社群裂变",hypeD:"每天额外 +2 名潜在顾客。",snacks:"泡面柜台",snacksD:"每位顾客额外消费 ¥4。",confirm:"确定清空存档重开吗？",en:"EN"},
-en:{title:"Pixel Net Cafe: Night Shift",sub:"ROGUELITE · NET CAFE",cash:"Cash",day:"Day",rep:"Rep",pow:"Power",sel:"Selected",empty:"Empty Spot",emptyD:"Buy a seat, then install a PC.",seat:"Seat {n}",noPc:"No PC installed yet.",pcD:"{pc} · ~¥{rate}/customer · power {power}",buySeat:"Buy Seat ¥{cost}",shop:"PC Shop",change:"Upgrade / Replace",log:"Shift Log",reset:"Restart",save:"Autosave",office:"Office PC",gaming:"Gaming PC",pro:"Esports Rig",officeD:"Cheap and efficient starter.",gamingD:"Balanced workhorse.",proD:"High income, higher power bill.",buy:"Buy ¥{cost}",eq:"Equipped",poor:"Not enough cash.",bSeat:"Bought a new seat.",bPc:"Installed {pc}.",cust:"{seat} used. Earned ¥{money}.",full:"Full house. A customer left.",end:"Day {day} closed. Power bill ¥{power}.",streamer:"Streamer visit: extra cash and reputation!",surge:"Power surge: maintenance cost.",broken:"Machine breakdown: emergency repair.",tour:"Local tournament: extra demand today.",perkK:"DAILY UPGRADE",perkT:"Pick 1 permanent buff",pick:"Pick",coupon:"Supplier Contacts",couponD:"Future purchases cost 12% less.",solar:"Efficiency Retrofit",solarD:"Power bills drop 18%.",vip:"VIP Pricing",vipD:"Earn 15% more per customer.",repair:"Spare Parts",repairD:"Reduce breakdown losses.",hype:"Community Hype",hypeD:"+2 potential customers per day.",snacks:"Noodle Counter",snacksD:"+¥4 from every customer.",confirm:"Delete save and restart?",en:"中"}
-};
-function fresh(){return{lang:"zh",day:1,money:480,rep:2,served:0,target:8,selected:0,seats:Array(12).fill(null),logs:[],discount:0,powerCut:0,income:0,repair:0,demand:0,snack:0}}
-function load(){try{var x=JSON.parse(localStorage.getItem(K));if(!x)return fresh();var f=fresh();Object.assign(f,x);f.seats=Array.from({length:12},function(_,i){return x.seats&&x.seats[i]?x.seats[i]:null});return f}catch(e){return fresh()}}
-var s=load(), scene=null, timer=null, shopOpen=false;
-function tr(k,o){var v=(Z[s.lang]&&Z[s.lang][k])||k;o=o||{};Object.keys(o).forEach(function(a){v=v.split("{"+a+"}").join(o[a])});return v}
-function save(){localStorage.setItem(K,JSON.stringify(s))}
-function seatCost(){return Math.round((120+s.seats.filter(Boolean).length*32)*(1-s.discount))}
-function pcCost(p){return Math.round(p.cost*(1-s.discount))}
-function power(){var n=0;s.seats.forEach(function(q){if(q&&q.pc){var p=pcs.find(function(x){return x.id===q.pc});n+=p.power*5}});return Math.round(n*(1-s.powerCut))}
-function val(q){var p=pcs.find(function(x){return x.id===q.pc});return Math.round(p.rate*(1+s.income))+s.snack}
-function log(m,tone){s.logs.unshift({m:m,t:tone||""});s.logs=s.logs.slice(0,18);save();renderLog()}
-function fmtPc(id){return tr(id)}
-function renderText(){
-document.documentElement.lang=s.lang==="zh"?"zh-CN":"en";document.getElementById("title").textContent=tr("title");document.getElementById("sub").textContent=tr("sub");document.getElementById("lang").textContent=tr("en");
-["cash","day","rep","pow"].forEach(function(k){document.getElementById(k+"L").textContent=tr(k)});
-document.getElementById("selL").textContent=tr("sel");document.getElementById("logT").textContent=tr("log");document.getElementById("reset").textContent=tr("reset");document.getElementById("save").textContent=tr("save");document.getElementById("perkK").textContent=tr("perkK");document.getElementById("perkT").textContent=tr("perkT");render()}
-function render(){
-document.getElementById("cash").textContent="¥"+s.money;document.getElementById("day").textContent=s.day;document.getElementById("rep").textContent=s.rep;document.getElementById("pow").textContent="¥"+power();document.getElementById("prog").textContent=s.served+" / "+s.target;
-var q=s.seats[s.selected], b=document.getElementById("mainBtn"), sb=document.getElementById("shopBtn");
-if(!q){document.getElementById("selT").textContent=tr("empty");document.getElementById("desc").textContent=tr("emptyD");b.textContent=tr("buySeat",{cost:seatCost()});b.disabled=s.money<seatCost();sb.textContent=tr("shop");sb.disabled=true;shopOpen=false}
-else if(!q.pc){document.getElementById("selT").textContent=tr("seat",{n:s.selected+1});document.getElementById("desc").textContent=tr("noPc");b.textContent=tr("shop");b.disabled=false;sb.textContent=tr("shop");sb.disabled=false}
-else{var p=pcs.find(function(x){return x.id===q.pc});document.getElementById("selT").textContent=tr("seat",{n:s.selected+1});document.getElementById("desc").textContent=tr("pcD",{pc:fmtPc(p.id),rate:val(q),power:p.power});b.textContent=tr("change");b.disabled=false;sb.textContent=tr("shop");sb.disabled=false}
-renderShop();renderLog();if(scene)scene.drawCafe()}
-function renderLog(){var e=document.getElementById("log");e.innerHTML=s.logs.slice(0,7).map(function(x){return '<div class="log '+x.t+'">'+x.m+'</div>'}).join("")||'<div class="log">…</div>'}
-function renderShop(){var e=document.getElementById("shop");e.style.display=shopOpen?"grid":"none";if(!shopOpen)return;var q=s.seats[s.selected];e.innerHTML=pcs.map(function(p){var c=pcCost(p),cur=q&&q.pc===p.id;return '<div class="pc"><h3>'+fmtPc(p.id)+'</h3><p>'+tr(p.id+"D")+'</p><div class="row"><span class="good">¥'+(Math.round(p.rate*(1+s.income))+s.snack)+'/customer</span><span>⚡ '+p.power+'</span></div><button class="btn '+(cur?"":"primary")+'" data-pc="'+p.id+'" '+((cur||s.money<c)?"disabled":"")+'>'+(cur?tr("eq"):tr("buy",{cost:c}))+'</button></div>'}).join("");e.querySelectorAll("[data-pc]").forEach(function(b){b.onclick=function(){buyPc(b.dataset.pc)}})}
-function buySeat(){var c=seatCost();if(s.money<c)return alert(tr("poor"));s.money-=c;s.seats[s.selected]={pc:null,busy:false};log(tr("bSeat"),"good");shopOpen=true;render();save()}
-function toggleShop(){if(!s.seats[s.selected])return;shopOpen=!shopOpen;render()}
-function buyPc(id){var p=pcs.find(function(x){return x.id===id}),c=pcCost(p);if(s.money<c)return alert(tr("poor"));s.money-=c;s.seats[s.selected].pc=id;log(tr("bPc",{pc:fmtPc(id)}),"good");shopOpen=false;save();render();start()}
-function randomEvent(){
-var r=Math.random();if(r<.10){s.money+=36+s.rep*3;s.rep++;log(tr("streamer"),"good")}
-else if(r<.17){var loss=Math.round(28*(1-s.powerCut));s.money-=loss;log(tr("surge"),"bad")}
-else if(r<.24){if(Math.random()>=s.repair){s.money-=45;s.rep=Math.max(0,s.rep-1);log(tr("broken"),"bad")}else log(tr("broken"),"good")}
-else if(r<.31){s.target+=2;s.rep++;log(tr("tour"),"good")}
-}
-function tick(){
-s.served++;var free=s.seats.map(function(q,i){return{q:q,i:i}}).filter(function(x){return x.q&&x.q.pc&&!x.q.busy});
-if(free.length){var x=free[Math.floor(Math.random()*free.length)],m=val(x.q);s.money+=m;x.q.busy=true;log(tr("cust",{seat:tr("seat",{n:x.i+1}),money:m}),"good");setTimeout(function(){if(s.seats[x.i])s.seats[x.i].busy=false;if(scene)scene.drawCafe()},900+Math.random()*1100)}
-else{if(Math.random()<.28)s.rep=Math.max(0,s.rep-1);log(tr("full"),"bad")}
-if(Math.random()<.18)randomEvent();save();render();if(s.served>=s.target)endDay()}
-function start(){clearInterval(timer);timer=null;if(s.seats.some(function(q){return q&&q.pc}))timer=setInterval(tick,1750)}
-function endDay(){clearInterval(timer);timer=null;var old=s.day,p=power();s.money-=p;s.day++;s.served=0;s.target=Math.max(6,7+s.day+s.demand+Math.floor(s.rep/3));s.seats=s.seats.map(function(q){return q?Object.assign({},q,{busy:false}):null});log(tr("end",{day:old,power:p}),p>40?"bad":"");save();render();setTimeout(showPerks,250)}
-function showPerks(){var pool=perkIds.slice(),pick=[];while(pick.length<3){pick.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0])}var e=document.getElementById("perks");e.innerHTML=pick.map(function(id){return '<div class="perk"><h3>'+tr(id)+'</h3><p>'+tr(id+"D")+'</p><button class="btn primary" data-perk="'+id+'">'+tr("pick")+'</button></div>'}).join("");e.querySelectorAll("[data-perk]").forEach(function(b){b.onclick=function(){applyPerk(b.dataset.perk)}});document.getElementById("overlay").style.display="grid"}
-function applyPerk(id){if(id==="coupon")s.discount=Math.min(.4,s.discount+.12);if(id==="solar")s.powerCut=Math.min(.55,s.powerCut+.18);if(id==="vip")s.income=Math.min(.6,s.income+.15);if(id==="repair")s.repair=Math.min(.65,s.repair+.20);if(id==="hype")s.demand+=2;if(id==="snacks")s.snack+=4;document.getElementById("overlay").style.display="none";save();render();start()}
-class Cafe extends Phaser.Scene{
-constructor(){super("cafe")}
-create(){scene=this;this.drawCafe()}
-drawCafe(){this.children.removeAll();var W=this.scale.width,H=this.scale.height,sx=W/360,sy=H/400;this.add.rectangle(W/2,H/2,W-22*sx,H-22*sy,0x211b2b).setStrokeStyle(3*sx,0x5b506b);this.add.rectangle(W/2,37*sy,W-34*sx,32*sy,0x362a44);this.add.text(22*sx,29*sy,s.lang==="zh"?"夜班网吧":"NIGHT CAFE",{fontFamily:"monospace",fontSize:(12*sx)+"px",color:"#ffd05a"}).setResolution(2);
-for(var i=0;i<12;i++)this.seat(i,sx,sy);this.add.rectangle(180*sx,354*sy,220*sx,28*sy,0x5b3f2a).setStrokeStyle(2*sx,0x9f7445);this.add.text(155*sx,348*sy,s.lang==="zh"?"前台":"DESK",{fontFamily:"monospace",fontSize:(8*sx)+"px",color:"#f9e8c0"}).setResolution(2)}
-seat(i,sx,sy){var col=i%3,row=Math.floor(i/3),x=(72+col*108)*sx,y=(104+row*58)*sy,q=s.seats[i],sel=s.selected===i,z=this.add.rectangle(x,y,88*sx,46*sy,q?0x2b2d38:0x181520,.96).setStrokeStyle((sel?3:2)*sx,sel?0xffd05a:(q?0x687080:0x3d3549));z.setInteractive({useHandCursor:true}).on("pointerdown",function(){s.selected=i;shopOpen=false;save();render()});this.add.text(x-39*sx,y-20*sy,String(i+1),{fontFamily:"monospace",fontSize:(7*sx)+"px",color:"#81768f"}).setResolution(2);if(!q){this.add.text(x-4*sx,y-6*sy,"+",{fontFamily:"monospace",fontSize:(18*sx)+"px",color:"#6c6279"}).setOrigin(.5).setResolution(2);return}var p=q.pc?pcs.find(function(a){return a.id===q.pc}):null;this.add.rectangle(x,y-7*sy,28*sx,18*sy,p?p.color:0x4b4654).setStrokeStyle(2*sx,0xb9b1c8);this.add.rectangle(x,y+10*sy,24*sx,8*sy,0x6d4b34);if(q.busy){this.add.circle(x-26*sx,y+6*sy,7*sx,0xf1bd76);this.add.rectangle(x-26*sx,y+18*sy,11*sx,12*sy,0x4670a3)}}
-}
-new Phaser.Game({type:Phaser.AUTO,parent:"game",backgroundColor:"#0b090e",pixelArt:true,antialias:false,roundPixels:true,scale:{mode:Phaser.Scale.RESIZE,width:360,height:400},scene:[Cafe]});
-document.getElementById("mainBtn").onclick=function(){if(!s.seats[s.selected])buySeat();else toggleShop()};document.getElementById("shopBtn").onclick=toggleShop;
-document.getElementById("lang").onclick=function(){s.lang=s.lang==="zh"?"en":"zh";save();renderText()};
-document.getElementById("reset").onclick=function(){if(confirm(tr("confirm"))){localStorage.removeItem(K);s=fresh();shopOpen=false;renderText();start()}};
-document.addEventListener("visibilitychange",function(){if(document.hidden)save()});window.addEventListener("beforeunload",save);renderText();start();
-})();
-</script>
+<script src="data.js"></script>
+<script src="core.js"></script>
+<script src="ui.js"></script>
+<script src="sim.js"></script>
+<script src="scene.js"></script>
 </body>
 </html>
